@@ -5,32 +5,40 @@ class PanicScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Simple dummy screen that looks like a harmless calculator
     return Scaffold(
-      appBar: AppBar(title: Text('Calculator')),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('0', style: TextStyle(fontSize: 48)),
-            SizedBox(height: 16),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: List.generate(12, (index) {
-                return ElevatedButton(onPressed: () {}, child: Text('${index+1}'));
-              }),
+      body: SafeArea(
+        child: Column(children: [
+          const SizedBox(height: 24),
+          const Center(child: Text('Calculator', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+          const SizedBox(height: 12),
+          Expanded(
+            child: GridView.count(
+              crossAxisCount: 3,
+              padding: const EdgeInsets.all(16),
+              children: List.generate(
+                  12,
+                  (i) => CalculatorTile(
+                      label: '${i < 9 ? i + 1 : (i == 9 ? "*" : (i == 10 ? 0 : "#"))}')),
             ),
-            SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('Return'),
-            )
-          ],
-        ),
+          ),
+        ]),
       ),
     );
   }
 }
+
+class CalculatorTile extends StatelessWidget {
+  final String label;
+  const CalculatorTile({Key? key, required this.label}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: InkWell(
+        onTap: () {},
+        child: Center(child: Text(label, style: const TextStyle(fontSize: 18))),
+      ),
+    );
+  }
+}
+
