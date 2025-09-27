@@ -61,7 +61,14 @@ SecureApp/
 ├── README.md # Project documentation (this file)
 └── firebase_instructions.md # Firebase setup guide
 ```
+##project flow
+Now your SecureApp flow is:
 
+Login → Home
+
+Home → Panic Button / Screenshot / Record Audio / File Browser
+
+File Browser → See all evidence files
 ---
 
 ## 🚀 Getting Started
@@ -115,4 +122,5 @@ Shubhrato Badole
 Vaishnavi Jare
 Yamini Asole
 Guide: Prof. Ashish Jagneet
+
 
