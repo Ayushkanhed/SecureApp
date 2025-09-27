@@ -4,10 +4,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'widgets/panic_screen.dart';
-import 'services/audio_recorder.dart';
-import 'utils/encryption_helper.dart';
+import 'file_browser.dart';
+import 'panic_screen.dart';
+import 'audio_recorder.dart';
+import 'encryption_helper.dart';
 
 void main() {
   runApp(const SecureApp());
@@ -196,6 +196,13 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 12),
             ElevatedButton.icon(
                 onPressed: _startRecording, icon: const Icon(Icons.mic), label: const Text('Start Audio Recording')),
+             ElevatedButton.icon(
+                onPressed: () => Navigator.of(context).push(
+               MaterialPageRoute(builder: (_) => const FileBrowser()),
+               ),
+              icon: const Icon(Icons.folder),
+              label: const Text('View Saved Evidence'),
+         ),
             const SizedBox(height: 8),
             ElevatedButton.icon(
                 onPressed: _stopRecording, icon: const Icon(Icons.stop), label: const Text('Stop Recording')),
@@ -209,3 +216,4 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
