@@ -4,10 +4,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'file_browser.dart';
-import 'panic_screen.dart';
-import 'audio_recorder.dart';
-import 'encryption_helper.dart';
+import 'widgets/file_browser.dart';
+import 'widgets/panic_screen.dart';
+import 'services/audio_recorder.dart';
+import 'utils/encryption_helper.dart';
 
 void main() {
   runApp(const SecureApp());
@@ -216,4 +216,5 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
 
