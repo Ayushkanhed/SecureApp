@@ -1,24 +1,29 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:crypto/crypto.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:encrypt/encrypt.dart' as encrypt_pkg;
+import 'package:path_provider/path_provider.dart';
 
 class EncryptionHelper {
-  // IMPORTANT: In production, never hardcode keys. Use secure keystores.
-  static final _key = encrypt.Key.fromUtf8('32chars_long_key_for_aes_256_encrypt!!');
-  static final _iv = encrypt.IV.fromLength(16);
+  static final _keyString =
+      sha256.convert(utf8.encode('very_secret_key_change_me')).toString().substring(0, 32);
 
-  static String encryptText(String plain) {
-    final encrypter = encrypt.Encrypter(encrypt.AES(_key, mode: encrypt.AESMode.cbc));
-    final encrypted = encrypter.encrypt(plain, iv: _iv);
-    return encrypted.base64;
-  }
+  static Future<String?> encryptFile(String inputFilePath) async {
+    try {
+      final file = File(inputFilePath);
+      final bytes = await file.readAsBytes();
+      final key = encrypt_pkg.Key.fromUtf8(_keyString);
+      final iv = encrypt_pkg.IV.fromLength(16);
+      final encrypter = encrypt_pkg.Encrypter(encrypt_pkg.AES(key));
+      final encrypted = encrypter.encryptBytes(bytes, iv: iv);
 
-  static String decryptText(String cipher) {
-    final encrypter = encrypt.Encrypter(encrypt.AES(_key, mode: encrypt.AESMode.cbc));
-    return encrypter.decrypt64(cipher, iv: _iv);
-  }
+      final dir = await getApplicationDocumentsDirectory();
+      final out = File('${dir.path}/${file.uri.pathSegments.last}.enc');
+      await out.writeAsBytes(encrypted.bytes);
 
-  static String sha256Hash(String input) {
-    return sha256.convert(utf8.encode(input)).toString();
+      return out.path;
+    } catch (e) {
+      return null;
+    }
   }
 }
