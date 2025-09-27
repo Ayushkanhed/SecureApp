@@ -1,25 +1,34 @@
-import 'package:universal_platform/universal_platform.dart';
+import 'dart:io';
+import 'package:flutter_sound/flutter_sound.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:path_provider/path_provider.dart';
 
-class AudioRecorderService {
-  bool get isWeb => UniversalPlatform.isWeb;
+class AudioRecorder {
+  final FlutterSoundRecorder _rec = FlutterSoundRecorder();
+  bool _inited = false;
 
   Future<void> init() async {
-    if (isWeb) {
-      print("Audio recording not supported on Web");
-      return;
-    }
-    // normal init here
+    if (_inited) return;
+    await _rec.openRecorder();
+    _inited = true;
   }
 
-  Future<String?> startRecording() async {
-    if (isWeb) {
-      throw Exception("Recording not supported on Web");
-    }
-    // normal recording here
+  Future<bool> start() async {
+    final status = await Permission.microphone.request();
+    if (!status.isGranted) return false;
+    final dir = await getApplicationDocumentsDirectory();
+    final path = '${dir.path}/record_${DateTime.now().millisecondsSinceEpoch}.aac';
+    await _rec.startRecorder(toFile: path, codec: Codec.aacADTS);
+    return true;
   }
 
-  Future<String?> stopRecording() async {
-    if (isWeb) return null;
-    // stop recorder
+  Future<String?> stop() async {
+    if (!_inited) return null;
+    final path = await _rec.stopRecorder();
+    return path;
+  }
+
+  void dispose() {
+    _rec.closeRecorder();
   }
 }
