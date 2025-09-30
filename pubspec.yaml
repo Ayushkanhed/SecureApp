@@ -17,6 +17,8 @@ dependencies:
   flutter_sound: ^9.2.13
   screenshot: ^1.3.0
   shared_preferences: ^2.1.1
+  record: ^5.0.0
+  path_provider: ^2.0.0
 
 
 
@@ -34,5 +36,6 @@ flutter_icons:
   image_path: "assets/icons/calculator.png"
 flutter:
   uses-material-design: true
+
 
 
